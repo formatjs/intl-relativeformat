@@ -1,7 +1,7 @@
 {
   "name": "intl-relativeformat",
   "version": "1.0.0-beta-1",
-  "description": "implementation of the ECMA 402 proposal for relativeformat",
+  "description": "Formats JavaScript dates to relative time strings.",
   "keywords": [
     "intl",
     "i18n",
