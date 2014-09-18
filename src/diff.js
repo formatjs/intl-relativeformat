@@ -22,8 +22,8 @@ export default function (dfrom, dto) {
         millisecond = Math.abs(duration),
         second      = round(millisecond / 1000),
         minute      = round(second / 60),
-        hours       = round(minute / 60),
-        day         = round(hours / 24),
+        hour        = round(minute / 60),
+        day         = round(hour / 24),
         week        = round(day / 7);
 
     var rawYears = daysToYears(day),
@@ -36,7 +36,7 @@ export default function (dfrom, dto) {
         month      : month,
         week       : week,
         day        : day,
-        hour       : hours,
+        hour       : hour,
         minute     : minute,
         second     : second,
         millisecond: millisecond
