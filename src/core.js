@@ -12,13 +12,19 @@ import diff from './diff';
 
 export default RelativeFormat;
 
-var priority = ['second', 'minute', 'hour', 'day', 'month', 'year'];
+var PRIORITY = ['second', 'minute', 'hour', 'day', 'month', 'year'];
 
 // -- RelativeFormat --------------------------------------------------------
 
 function RelativeFormat(locales, options) {
+    options = options || {};
+
     defineProperty(this, '_locale', {value: this._resolveLocale(locales)});
     defineProperty(this, '_messages', {value: objCreate(null)});
+
+    if (options.units) {
+        defineProperty(this, '_units', {value: options.units});
+    }
 
     // "Bind" `format()` method to `this` so it can be passed by reference like
     // the other `Intl` APIs.
@@ -91,56 +97,34 @@ RelativeFormat.prototype._format = function (date) {
         throw new TypeError('A date must be provided.');
     }
 
-    var d = diff(new Date(), date),
-        key, msg, i, l;
+    var diffReport  = diff(new Date(), date);
+    var units       = this._units || this._selectUnits(diffReport);
+    var diffInUnits = diffReport[units];
 
-    for (i = 0, l = priority.length; i < l; i++) {
-        key = priority[i];
-        if (d[key] < RelativeFormat.thresholds[key]) {
+    var relativeUnits = this._resolveRelativeUnits(diffInUnits, units);
+    if (relativeUnits) {
+        return relativeUnits;
+    }
+
+    var msg = this._resolveMessage(units);
+    return msg.format({
+        '0' : Math.abs(diffInUnits),
+        when: diffInUnits < 0 ? 'past' : 'future'
+    });
+};
+
+RelativeFormat.prototype._selectUnits = function (diffReport) {
+    var i, l, units;
+
+    for (i = 0, l = PRIORITY.length; i < l; i += 1) {
+        units = PRIORITY[i];
+
+        if (Math.abs(diffReport[units]) < RelativeFormat.thresholds[units]) {
             break;
         }
     }
 
-    msg = this._resolveMessage(key);
-
-    return msg.format({
-        '0' : d[key],
-        when: d.duration < 0 ? 'past' : 'future'
-    });
-};
-
-RelativeFormat.prototype._resolveMessage = function (key) {
-    var messages = this._messages,
-        field, relativeTime, i, future, past;
-
-    // Create a new synthetic message based on the locale data from CLDR.
-    if (!messages[key]) {
-        field        = RelativeFormat.__localeData__[this._locale].fields[key];
-        relativeTime = field.relativeTime;
-        future       = '';
-        past         = '';
-
-        for (i in relativeTime.future) {
-            if (relativeTime.future.hasOwnProperty(i)) {
-                future += ' ' + i + ' {' +
-                    relativeTime.future[i].replace('{0}', '#') + '}';
-            }
-        }
-        for (i in relativeTime.past) {
-            if (relativeTime.past.hasOwnProperty(i)) {
-                past += ' ' + i + ' {' +
-                    relativeTime.past[i].replace('{0}', '#') + '}';
-            }
-        }
-
-        messages[key] = new IntlMessageFormat(
-            '{when, select, future {{0, plural, ' + future + '}}' +
-                           'past {{0, plural, ' + past + '}}}',
-            this._locale
-        );
-    }
-
-    return messages[key];
+    return units;
 };
 
 RelativeFormat.prototype._resolveLocale = function (locales) {
@@ -172,4 +156,46 @@ RelativeFormat.prototype._resolveLocale = function (locales) {
     }
 
     return locale || RelativeFormat.defaultLocale.split('-')[0];
+};
+
+RelativeFormat.prototype._resolveMessage = function (units) {
+    var messages = this._messages,
+        field, relativeTime, i, future, past;
+
+    // Create a new synthetic message based on the locale data from CLDR.
+    if (!messages[units]) {
+        field        = RelativeFormat.__localeData__[this._locale].fields[units];
+        relativeTime = field.relativeTime;
+        future       = '';
+        past         = '';
+
+        for (i in relativeTime.future) {
+            if (relativeTime.future.hasOwnProperty(i)) {
+                future += ' ' + i + ' {' +
+                    relativeTime.future[i].replace('{0}', '#') + '}';
+            }
+        }
+        for (i in relativeTime.past) {
+            if (relativeTime.past.hasOwnProperty(i)) {
+                past += ' ' + i + ' {' +
+                    relativeTime.past[i].replace('{0}', '#') + '}';
+            }
+        }
+
+        messages[units] = new IntlMessageFormat(
+            '{when, select, future {{0, plural, ' + future + '}}' +
+                           'past {{0, plural, ' + past + '}}}',
+            this._locale
+        );
+    }
+
+    return messages[units];
+};
+
+RelativeFormat.prototype._resolveRelativeUnits = function (diff, units) {
+    var field = RelativeFormat.__localeData__[this._locale].fields[units];
+
+    if (field.relative) {
+        return field.relative[diff];
+    }
 };
