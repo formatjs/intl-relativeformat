@@ -83,9 +83,9 @@ defineProperty(RelativeFormat, 'thresholds', {
 });
 
 RelativeFormat.prototype.resolvedOptions = function () {
-    // TODO: Provide anything else?
     return {
-        locale: this._locale
+        locale: this._locale,
+        units : this._units
     };
 };
 
