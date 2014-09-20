@@ -91,19 +91,9 @@ describe('IntlRelativeFormat', function () {
             expect(rf).to.respondTo('resolvedOptions');
         });
 
-        it('should return an empty object', function () {
-            var p, pCount = 0,
-                resolvedOptions;
-
-            resolvedOptions = rf.resolvedOptions();
-
-            for (p in resolvedOptions) {
-                if (resolvedOptions.hasOwnProperty(p)) {
-                    pCount++;
-                }
-            }
-
-            expect(pCount).to.equal(1);
+        it('should contain `locale` and `units` properties', function () {
+            var resolvedOptions = rf.resolvedOptions();
+            expect(resolvedOptions).to.include.keys(['locale', 'units']);
         });
     });
 
