@@ -24,7 +24,7 @@
   "main": "index.js",
   "jsnext:main": "src/main.js",
   "dependencies": {
-    "intl-messageformat": "^1.0.0-rc-5"
+    "intl-messageformat": "1.0.0-rc-6"
   },
   "devDependencies": {
     "benchmark": "^1.0.0",
