@@ -169,6 +169,14 @@ RelativeFormat.prototype._resolveLocale = function (locales) {
         // We just need the root part of the langage tag.
         locale = locales[i].split('-')[0].toLowerCase();
 
+        // Validate that the langage tag is structurally valid.
+        if (!/[a-z]{2,3}/.test(locale)) {
+            throw new Error(
+                'Language tag provided to IntlRelativeFormat is not ' +
+                'structrually valid: ' + locale
+            );
+        }
+
         // Return the first locale for which we have CLDR data registered.
         if (hop.call(localeData, locale)) {
             return locale;
