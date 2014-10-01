@@ -12,10 +12,16 @@ import diff from './diff';
 
 export default RelativeFormat;
 
+// -----------------------------------------------------------------------------
+
 var FIELDS = ['second', 'minute', 'hour', 'day', 'month', 'year'];
 var STYLES = ['best fit', 'numeric'];
 
-// -- RelativeFormat --------------------------------------------------------
+var getTime = Date.now ? Date.now : function () {
+    return new Date().getTime();
+};
+
+// -- RelativeFormat -----------------------------------------------------------
 
 function RelativeFormat(locales, options) {
     options = options || {};
@@ -40,16 +46,16 @@ function RelativeFormat(locales, options) {
 defineProperty(RelativeFormat, '__localeData__', {value: objCreate(null)});
 defineProperty(RelativeFormat, '__addLocaleData', {value: function (data) {
     if (!(data && data.locale)) {
-        throw new Error(
-            'Locale data provided to IntlRelativeFormat does not contain a ' +
-            '`locale` property'
+        throw new RangeError(
+            'Locale data provided to IntlRelativeFormat is missing a ' +
+            '`locale` property value'
         );
     }
 
     if (!data.fields) {
-        throw new Error(
-            'Locale data provided to IntlRelativeFormat does not contain a ' +
-            '`fields` property'
+        throw new RangeError(
+            'Locale data provided to IntlRelativeFormat is missing a ' +
+            '`fields` property value'
         );
     }
 
@@ -94,17 +100,21 @@ RelativeFormat.prototype.resolvedOptions = function () {
 };
 
 RelativeFormat.prototype._format = function (date) {
-    date = new Date(date);
+    var now = getTime();
+
+    if (date === undefined) {
+        date = now;
+    }
 
     // Determine if the `date` is valid.
-    if (!(date && date.getTime())) {
-        throw new TypeError(
-            'A Date must be provided to a IntlRelativeFormat instance\'s ' +
-            '`format()` function'
+    if (!isFinite(date)) {
+        throw new RangeError(
+            'The date value provided to IntlRelativeFormat#format() is not ' +
+            'in valid range.'
         );
     }
 
-    var diffReport  = diff(new Date(), date);
+    var diffReport  = diff(now, date);
     var units       = this._options.units || this._selectUnits(diffReport);
     var diffInUnits = diffReport[units];
 
@@ -129,14 +139,14 @@ RelativeFormat.prototype._isValidUnits = function (units) {
     if (typeof units === 'string') {
         var suggestion = /s$/.test(units) && units.substr(0, units.length - 1);
         if (suggestion && FIELDS.indexOf(suggestion) >= 0) {
-            throw new Error(
+            throw new RangeError(
                 '"' + units + '" is not a valid IntlRelativeFormat `units` ' +
                 'value, did you mean: ' + suggestion
             );
         }
     }
 
-    throw new Error(
+    throw new RangeError(
         '"' + units + '" is not a valid IntlRelativeFormat `units` value, it ' +
         'must be one of: "' + FIELDS.join('", "') + '"'
     );
@@ -159,21 +169,13 @@ RelativeFormat.prototype._resolveLocale = function (locales) {
         // We just need the root part of the langage tag.
         locale = locales[i].split('-')[0].toLowerCase();
 
-        // Validate that the langage tag is structurally valid.
-        if (!/[a-z]{2,3}/.test(locale)) {
-            throw new Error(
-                'Language tag provided to IntlRelativeFormat is not ' +
-                'structrually valid: ' + locale
-            );
-        }
-
         // Return the first locale for which we have CLDR data registered.
         if (hop.call(localeData, locale)) {
             return locale;
         }
     }
 
-    throw new Error(
+    throw new RangeError(
         'No locale data has been added to IntlRelativeFormat for: ' +
         locales.join(', ')
     );
@@ -231,7 +233,7 @@ RelativeFormat.prototype._resolveStyle = function (style) {
         return style;
     }
 
-    throw new Error(
+    throw new RangeError(
         '"' + style + '" is not a valid IntlRelativeFormat `style` value, it ' +
         'must be one of: "' + STYLES.join('", "') + '"'
     );
