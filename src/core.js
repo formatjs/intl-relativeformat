@@ -46,14 +46,14 @@ function RelativeFormat(locales, options) {
 defineProperty(RelativeFormat, '__localeData__', {value: objCreate(null)});
 defineProperty(RelativeFormat, '__addLocaleData', {value: function (data) {
     if (!(data && data.locale)) {
-        throw new RangeError(
+        throw new Error(
             'Locale data provided to IntlRelativeFormat is missing a ' +
             '`locale` property value'
         );
     }
 
     if (!data.fields) {
-        throw new RangeError(
+        throw new Error(
             'Locale data provided to IntlRelativeFormat is missing a ' +
             '`fields` property value'
         );
@@ -106,7 +106,8 @@ RelativeFormat.prototype._format = function (date) {
         date = now;
     }
 
-    // Determine if the `date` is valid.
+    // Determine if the `date` is valid, and throw a similar error to what
+    // `Intl.DateTimeFormat#format()` would throw.
     if (!isFinite(date)) {
         throw new RangeError(
             'The date value provided to IntlRelativeFormat#format() is not ' +
@@ -139,14 +140,14 @@ RelativeFormat.prototype._isValidUnits = function (units) {
     if (typeof units === 'string') {
         var suggestion = /s$/.test(units) && units.substr(0, units.length - 1);
         if (suggestion && FIELDS.indexOf(suggestion) >= 0) {
-            throw new RangeError(
+            throw new Error(
                 '"' + units + '" is not a valid IntlRelativeFormat `units` ' +
                 'value, did you mean: ' + suggestion
             );
         }
     }
 
-    throw new RangeError(
+    throw new Error(
         '"' + units + '" is not a valid IntlRelativeFormat `units` value, it ' +
         'must be one of: "' + FIELDS.join('", "') + '"'
     );
@@ -183,7 +184,7 @@ RelativeFormat.prototype._resolveLocale = function (locales) {
         }
     }
 
-    throw new RangeError(
+    throw new Error(
         'No locale data has been added to IntlRelativeFormat for: ' +
         locales.join(', ')
     );
@@ -241,7 +242,7 @@ RelativeFormat.prototype._resolveStyle = function (style) {
         return style;
     }
 
-    throw new RangeError(
+    throw new Error(
         '"' + style + '" is not a valid IntlRelativeFormat `style` value, it ' +
         'must be one of: "' + STYLES.join('", "') + '"'
     );
