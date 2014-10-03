@@ -8,6 +8,11 @@ if [[ "false" != "$TRAVIS_PULL_REQUEST" ]]; then
     exit 0
 fi
 
+if [[ "0.11" == "$TRAVIS_NODE_VERSION" ]]; then
+    echo "Skipping browser tests in a duplicated environment"
+    exit 0
+fi
+
 if [[ "x" == "x$SAUCE_USERNAME" ]]; then
     echo $0 "is missing env var SAUCE_USERNAME"
     exit 1
