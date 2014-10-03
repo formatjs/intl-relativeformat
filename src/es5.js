@@ -46,14 +46,14 @@ var objCreate = Object.create || function (proto, props) {
     return obj;
 };
 
-var arrIndexOf = Array.prototype.indexOf || function (search) {
+var arrIndexOf = Array.prototype.indexOf || function (search, fromIndex) {
     /*jshint validthis:true */
     var arr = this;
     if (!arr.length) {
         return -1;
     }
 
-    for (var i = arguments[1] || 0, max = arr.length; i < max; i++) {
+    for (var i = fromIndex || 0, max = arr.length; i < max; i++) {
         if (arr[i] === search) {
             return i;
         }
