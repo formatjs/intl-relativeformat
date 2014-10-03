@@ -48,13 +48,13 @@ var objCreate = Object.create || function (proto, props) {
 
 var arrIndexOf = Array.prototype.indexOf || function (search) {
     /*jshint validthis:true */
-    var t = this;
-    if (!t.length) {
+    var arr = this;
+    if (!arr.length) {
         return -1;
     }
 
-    for (var i = arguments[1] || 0, max = t.length; i < max; i++) {
-        if (t[i] === search) {
+    for (var i = arguments[1] || 0, max = arr.length; i < max; i++) {
+        if (arr[i] === search) {
             return i;
         }
     }
