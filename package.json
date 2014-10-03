@@ -49,8 +49,8 @@
     "yeti": "^0.2.29"
   },
   "scripts": {
-    "test": "istanbul cover -- ./node_modules/mocha/bin/_mocha tests/runner.js --reporter spec",
-    "travis": "istanbul cover -- ./node_modules/mocha/bin/_mocha tests/runner.js --reporter spec && tests/saucelabs.sh",
+    "test": "istanbul cover -x lib/locales.js -- ./node_modules/mocha/bin/_mocha tests/runner.js --reporter spec",
+    "travis": "istanbul cover -x lib/locales.js -- ./node_modules/mocha/bin/_mocha tests/runner.js --reporter spec && tests/saucelabs.sh",
     "prepublish": "grunt"
   },
   "homepage": "https://github.com/yahoo/intl-relativeformat",
