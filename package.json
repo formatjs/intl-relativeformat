@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "benchmark": "^1.0.0",
-    "chai": "^1.9.1",
+    "expect.js": "^0.3.1",
     "grunt": "^0.4.5",
     "grunt-benchmark": "^0.3.0",
     "grunt-bundle-jsnext-lib": "^0.2.1",
@@ -47,7 +47,8 @@
     "yeti": "^0.2.29"
   },
   "scripts": {
-    "test": "istanbul cover -- _mocha tests/ --reporter spec && tests/saucelabs.sh",
+    "test": "istanbul cover -- ./node_modules/mocha/bin/_mocha tests/runner.js --reporter spec",
+    "travis": "istanbul cover -- ./node_modules/mocha/bin/_mocha tests/runner.js --reporter spec && tests/saucelabs.sh",
     "prepublish": "grunt"
   },
   "homepage": "https://github.com/yahoo/intl-relativeformat",
