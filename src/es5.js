@@ -6,7 +6,7 @@ See the accompanying LICENSE file for terms.
 
 /* jslint esnext: true */
 
-export {defineProperty, objCreate};
+export {defineProperty, objCreate, arrIndexOf};
 
 // Purposely using the same implementation as the Intl.js `Intl` polyfill.
 // Copyright 2013 Andy Earnshaw, MIT License
@@ -44,4 +44,20 @@ var objCreate = Object.create || function (proto, props) {
     }
 
     return obj;
+};
+
+var arrIndexOf = Array.prototype.indexOf || function (search) {
+    /*jshint validthis:true */
+    var t = this;
+    if (!t.length) {
+        return -1;
+    }
+
+    for (var i = arguments[1] || 0, max = t.length; i < max; i++) {
+        if (t[i] === search) {
+            return i;
+        }
+    }
+
+    return -1;
 };
