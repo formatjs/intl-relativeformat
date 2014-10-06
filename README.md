@@ -8,7 +8,7 @@ Formats **relative times** (e.g., "3 hours ago", "tomorrow", "in 2 days", etc) u
 [![Dependency Status][david-badge]][david]
 
 
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/intl-relativeformat.svg)](https://saucelabs.com/u/intl-relativeformat)
+[![Sauce Test Status][sauce-badge]][sauce]
 
 Overview
 --------
@@ -152,3 +152,5 @@ See the [LICENSE file][LICENSE] for license text and copyright information.
 [semver]: http://semver.org/
 [LICENSE]: https://github.com/yahoo/intl-relativeformat/blob/master/LICENSE
 [moment.js]: http://momentjs.com/
+[sauce]: https://saucelabs.com/u/intl-relativeformat
+[sauce-badge]: https://saucelabs.com/browser-matrix/intl-relativeformat.svg
