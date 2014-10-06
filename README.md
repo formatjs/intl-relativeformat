@@ -1,7 +1,7 @@
 Intl RelativeFormat
 ==================
 
-Formats **relative times** (e.g., "3 hours ago", "tomorrow", "in 2 days", etc) using [CLDR][] locale data.
+Formats JavaScript dates to **relative times** strings (e.g., "3 hours ago").
 
 [![npm Version][npm-badge]][npm]
 [![Build Status][travis-badge]][travis]
@@ -15,9 +15,9 @@ Overview
 
 ### Goals
 
-This package aims to provide a way for you to format relative time for people using your app. You can use this package in the browser and on the server via Node.js.
+This package aims to provide a way to format different variations of relative time. You can use this package in the browser and on the server via Node.js.
 
-This implementation is very similar to [moment.js][], in concept, although it provides just formatting features based on [CLDR][] data, which is the industry standard.
+This implementation is very similar to [moment.js][], in concept, although it provides only formatting features based on the Unicode [CLDR][] locale data, an industry standard.
 
 _Note: This `IntlRelativeFormat` API may change to stay in sync with ECMA-402, but this package will follow [semver][]._
 
@@ -26,7 +26,8 @@ _Note: This `IntlRelativeFormat` API may change to stay in sync with ECMA-402, b
 This API is very similar to [ECMA 402][]'s [DateTimeFormat][] and [NumberFormat][].
 
 #### `IntlRelativeFormat` Constructor
-To format dates to relative time, use the `IntlRelativeFormat` constructor. The constructor takes two parameters:
+
+To format a date to relative time, use the `IntlRelativeFormat` constructor. The constructor takes two parameters:
 
  - **locales** - _{String | String[]}_ - A string with a BCP 47 language tag, or an array of such strings. If you do not provide a locale, the default locale will be used, but you should _always_ provide one!
 
@@ -35,13 +36,13 @@ To format dates to relative time, use the `IntlRelativeFormat` constructor. The 
 Here is the most basic example:
 
 ```js
-var rt = new IntlRelativeFormat('en');
-var output = rt.format(value);
+var rf = new IntlRelativeFormat('en');
+var output = rf.format(dateValue);
 ```
 
 The format method (_which takes a JavaScript date or timestamp_) will compares it with `now`, and returns the formatted string; e.g., "3 hours ago" in the corresponding locale passed into the constructor.
 
-_note: `rt` instance should be enough for your entire application, unless you want to use custom options._
+_note: `rf` instance should be enough for your entire application, unless you want to use custom options._
 
 ### Custom Options
 
@@ -52,10 +53,10 @@ The optional second argument `options` provides a way to customize how the relat
 By default, the relative time is computed to the closest unit, but you can explicitly call it to force `units` to be displayed in `second`, `minute`, `hour`, `day`, `month` or `year`:
 
 ```js
-var rt = new IntlRelativeFormat('en', {
+var rf = new IntlRelativeFormat('en', {
     units: 'day'
 });
-var output = rt.format(value);
+var output = rf.format(dateValue);
 ```
 
 As a result, the output will be "14 days ago" instead of "2 weeks ago".
@@ -65,10 +66,10 @@ As a result, the output will be "14 days ago" instead of "2 weeks ago".
 By default, the relative time is computed as "best fit", which means that instead of "1 day ago", it will display "yesterday", or "in 1 year" will be "next year", etc. But you can force to always use the "numeric" alternative:
 
 ```js
-var rt = new IntlRelativeFormat('en', {
+var rf = new IntlRelativeFormat('en', {
     style: 'numeric'
 });
-var output = rt.format(value);
+var output = rf.format(dateValue);
 ```
 
 As a result, the output will be "1 day ago" instead of "yesterday".
@@ -92,8 +93,8 @@ if (!global.Intl) {
     global.Intl = require('intl'); // polyfill for `Intl`
 }
 var IntlRelativeFormat = require('intl-relativeformat');
-var rt = new IntlRelativeFormat('en');
-var output = rt.format(dateValue);
+var rf = new IntlRelativeFormat('en');
+var output = rf.format(dateValue);
 ```
 
 _Note: in Node.js, the data for all 150+ locales is loaded along with the library._
