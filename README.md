@@ -17,7 +17,7 @@ Overview
 
 This package aims to provide a way to format different variations of relative time. You can use this package in the browser and on the server via Node.js.
 
-This implementation is very similar to [moment.js][], in concept, although it provides only formatting features based on the Unicode [CLDR][] locale data, an industry standard.
+This implementation is very similar to [moment.js][], in concept, although it provides only formatting features based on the Unicode [CLDR][] locale data, an industry standard that supports more than 150 locales.
 
 _Note: This `IntlRelativeFormat` API may change to stay in sync with ECMA-402, but this package will follow [semver][]._
 
@@ -42,7 +42,7 @@ var output = rf.format(dateValue);
 
 The format method (_which takes a JavaScript date or timestamp_) will compares it with `now`, and returns the formatted string; e.g., "3 hours ago" in the corresponding locale passed into the constructor.
 
-_note: `rf` instance should be enough for your entire application, unless you want to use custom options._
+_Note: The `rf` instance should be enough for your entire application, unless you want to use custom options._
 
 ### Custom Options
 
@@ -50,7 +50,7 @@ The optional second argument `options` provides a way to customize how the relat
 
 #### Units
 
-By default, the relative time is computed to the closest unit, but you can explicitly call it to force `units` to be displayed in `second`, `minute`, `hour`, `day`, `month` or `year`:
+By default, the relative time is computed to the best fit unit, but you can explicitly call it to force `units` to be displayed in `"second"`, `"minute"`, `"hour"`, `"day"`, `"month"` or `"year"`:
 
 ```js
 var rf = new IntlRelativeFormat('en', {
@@ -59,11 +59,11 @@ var rf = new IntlRelativeFormat('en', {
 var output = rf.format(dateValue);
 ```
 
-As a result, the output will be "14 days ago" instead of "2 weeks ago".
+As a result, the output will be "70 days ago" instead of "2 months ago".
 
 #### Style
 
-By default, the relative time is computed as "best fit", which means that instead of "1 day ago", it will display "yesterday", or "in 1 year" will be "next year", etc. But you can force to always use the "numeric" alternative:
+By default, the relative time is computed as `"best fit"`, which means that instead of "1 day ago", it will display "yesterday", or "in 1 year" will be "next year", etc. But you can force to always use the "numeric" alternative:
 
 ```js
 var rf = new IntlRelativeFormat('en', {
@@ -103,7 +103,7 @@ _Note: in Node.js, the data for all 150+ locales is loaded along with the librar
 ### Loading IntlRelativeFormat in a browser
 
 ```html
-<script src="dist/intl-relativeformat/intl-relativeformat.min.js"></script>
+<script src="intl-relativeformat/intl-relativeformat.min.js"></script>
 ```
 
 By default, Intl RelativeFormat ships with the locale data for English built-in to the runtime library. When you need to format data in another locale, include its data; e.g., for French:
