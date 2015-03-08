@@ -334,6 +334,11 @@ describe('IntlRelativeFormat', function () {
             var output = rt.format(new Date(now-(60 * 1000)), {now: new Date(now)});
             expect(output).to.equal('1 minute ago');
         });
+
+        it('should accept a 0 value for now', function() {
+            var output = rt.format(new Date(60000), {now: 0});
+            expect(output).to.equal('in 1 minute');
+        });
     });
 
     // INTERNAL FORMAT DELEGATION

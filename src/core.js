@@ -140,8 +140,15 @@ RelativeFormat.prototype._compileMessage = function (units) {
 
 RelativeFormat.prototype._format = function (date, options) {
     var now;
-    if (options && options.now) {
+    if (options && "now" in options) {
         now = options.now;
+
+        if (!isFinite(now)) {
+            throw new RangeError(
+                'The now option provided to IntlRelativeFormat#format() is ' +
+                'not in valid range.'
+            );
+        }
     } else {
         now = dateNow();
     }
