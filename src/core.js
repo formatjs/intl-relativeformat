@@ -139,22 +139,12 @@ RelativeFormat.prototype._compileMessage = function (units) {
 };
 
 RelativeFormat.prototype._format = function (date, options) {
-    var now;
-    if (options && "now" in options) {
-        now = options.now;
-
-        if (!isFinite(now)) {
-            throw new RangeError(
-                'The now option provided to IntlRelativeFormat#format() is ' +
-                'not in valid range.'
-            );
-        }
-    } else {
-        now = dateNow();
-    }
-
-    if (date === undefined) {
-        date = now;
+    var now = options && options.now !== undefined ? options.now : dateNow();
+    if (!isFinite(now)) {
+        throw new RangeError(
+            'The now option provided to IntlRelativeFormat#format() is not ' +
+            'in valid range.'
+        );
     }
 
     // Determine if the `date` is valid, and throw a similar error to what
