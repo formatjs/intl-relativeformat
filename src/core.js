@@ -40,8 +40,8 @@ function RelativeFormat(locales, options) {
     // "Bind" `format()` method to `this` so it can be passed by reference like
     // the other `Intl` APIs.
     var relativeFormat = this;
-    this.format = function format(date) {
-        return relativeFormat._format(date);
+    this.format = function format(date, options) {
+        return relativeFormat._format(date, options);
     };
 }
 
@@ -138,8 +138,13 @@ RelativeFormat.prototype._compileMessage = function (units) {
     return new IntlMessageFormat(message, locales);
 };
 
-RelativeFormat.prototype._format = function (date) {
-    var now = dateNow();
+RelativeFormat.prototype._format = function (date, options) {
+    var now;
+    if (options && options.now) {
+        now = options.now;
+    } else {
+        now = dateNow();
+    }
 
     if (date === undefined) {
         date = now;

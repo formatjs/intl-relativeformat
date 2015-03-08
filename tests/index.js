@@ -213,6 +213,12 @@ describe('IntlRelativeFormat', function () {
             var output = rt.format(future(1 * 1000));
             expect(output).to.equal('dentro de 1 segundo');
         });
+
+        it('should accept a custom value for now', function() {
+            var now = 1425839825400;
+            var output = rt.format(new Date(now-(60 * 1000)), {now: new Date(now)});
+            expect(output).to.equal('hace 1 minuto');
+        });
     });
 
     describe('and relative time under the English locale', function () {
@@ -321,6 +327,12 @@ describe('IntlRelativeFormat', function () {
         it('should return 1 second future', function () {
             var output = rt.format(future(1 * 1000));
             expect(output).to.equal('in 1 second');
+        });
+
+        it('should accept a custom value for now', function() {
+            var now = 1425839825400;
+            var output = rt.format(new Date(now-(60 * 1000)), {now: new Date(now)});
+            expect(output).to.equal('1 minute ago');
         });
     });
 
