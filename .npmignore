@@ -1,6 +1,10 @@
-coverage/
-tasks/
+node_modules/
+scripts/
+test/
 tests/
-tmp/
-.travis.yml
-Gruntfile.js
+*.log
+.rpt2_cache
+coverage
+*.config.js
+tsconfig.*
+.nyc_output

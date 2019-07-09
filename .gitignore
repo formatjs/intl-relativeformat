@@ -1,4 +1,7 @@
-coverage/
-lib/
+.nyc_output
 node_modules/
-tmp/
+tests/browser.*
+src/locales.ts
+src/en.ts
+dist/
+lib/

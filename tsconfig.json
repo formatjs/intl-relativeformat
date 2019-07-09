@@ -1,11 +1,11 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "module": "es6",
         "moduleResolution": "node",
         "target": "es5",
-        "lib": ["es6", "dom", "es2018.intl"],
+        "lib": ["es6", "dom", "es2017.intl", "es2018.intl", "esnext.intl"],
+        "declaration": true,
         "strict": true,
-        "sourceMap": true,
-        "allowJs": true
+        "resolveJsonModule": true
     }
 }

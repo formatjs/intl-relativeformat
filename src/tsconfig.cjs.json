@@ -1,7 +1,7 @@
 {
     "extends": "../tsconfig.json",
     "compilerOptions": {
-        "outDir": "../lib",
-        "baseUrl": "."
+        "outDir": "../dist",
+        "module": "commonjs"
     }
 }
